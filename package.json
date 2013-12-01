@@ -1,0 +1,32 @@
+{
+  "name": "lindy",
+  "version": "0.0.0",
+  "description": "Lightweight JavaScript template language with familiar syntax.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adamdicarlo/lindy.git"
+  },
+  "keywords": [
+    "template",
+    "lindy"
+  ],
+  "author": {
+    "name": "Adam J. DiCarlo",
+    "email": "adam.dicarlo@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adamdicarlo/lindy/issues"
+  },
+  "dependencies": {
+    "lindy-simple": "0.0.2",
+    "peek": "0.0.1"
+  },
+  "devDependencies": {
+    "tape": "~2.3.0"
+  }
+}
