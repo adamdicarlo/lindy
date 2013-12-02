@@ -12,6 +12,16 @@ test('test basic for loop tag', function(assert) {
   assert.end()
 })
 
+test('test basic reversed for loop tag', function(assert) {
+  var source = '{% for i in numbers reversed %}{{ i }}{% endfor %}'
+    , render = lindy(source)
+    , output
+
+  output = render({numbers: [1,2,3,4,5]})
+  assert.strictEqual(output, '54321', 'reverses given numbers')
+  assert.end()
+})
+
 test('test for loop with an {% empty %} clause', function(assert) {
   var source = [
       '{% for x in xs %}'
