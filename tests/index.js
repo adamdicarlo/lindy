@@ -66,6 +66,24 @@ test('example from README', function(assert) {
   assert.end()
 })
 
+test('nested if tags', function(assert) {
+  var source = readTemplateSync('nested-ifs.lindy')
+    , render = lindy(source)
+    , just_dark = /^\s*dark\s*$/
+    , test_cases = [
+          {data: {bright: false, big: false}, regex: just_dark}
+        , {data: {bright: false, big: true},  regex: just_dark}
+        , {data: {bright: true,  big: false}, regex: /bright\s*and small/}
+        , {data: {bright: true,  big: true},  regex: /bright\s*and big/}
+      ]
+
+  test_cases.forEach(function(test_case, index) {
+    var output = render(test_case.data)
+    assert.ok(test_case.regex.test(output), 'nested if test ' + index)
+  })
+  assert.end()
+})
+
 function readTemplateSync(path) {
   return fs.readFileSync('./tests/templates/' + path, {encoding: 'utf-8'})
 }

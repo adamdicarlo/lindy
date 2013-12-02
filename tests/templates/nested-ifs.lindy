@@ -1,0 +1,10 @@
+{% if bright %}
+  bright
+  {% if big %}
+    and big
+  {% else %}
+    and small
+  {% endif %}
+{% else %}
+  dark
+{% endif %}
