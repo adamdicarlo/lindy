@@ -11,6 +11,22 @@ test('test basic for loop tag', function(assert) {
   assert.end()
 })
 
+test('test for loop with an {% empty %} clause', function(assert) {
+  var source = [
+      '{% for x in xs %}'
+    , '  {{ x.k }}={{ x.v }}'
+    , '{% empty %}'
+    , '  nothing in xs'
+    , '{% endfor %}'
+  ].join('\n')
+    , render = lindy(source)
+    , output
+
+  output = render({xs: [{k: 'pos', v: 1}, {k: 'pos', v: 5}]})
+  assert.strictEqual(output, '\n  pos=1\n\n  pos=5\n')
+  assert.end()
+})
+
 test('test basic if tag', function(assert) {
   var source = 'hello{% if specific %} {{specific}}{%endif%}'
     , render = lindy(source)
