@@ -1,6 +1,6 @@
 {
   "name": "lindy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Lightweight JavaScript template language with a familiar syntax.",
   "main": "index.js",
   "scripts": {
