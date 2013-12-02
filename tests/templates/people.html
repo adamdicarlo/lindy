@@ -1,0 +1,13 @@
+<h2>{{ heading }}</h2>
+<ul>
+  {% for person in people %}
+  <li>
+    {{ person.name }} ({{ person.age }}) is
+    {% if person.employed %}
+      working
+    {% else %}
+      unemployed
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>

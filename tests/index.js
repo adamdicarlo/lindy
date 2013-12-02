@@ -1,4 +1,5 @@
 var lindy = require('../index')
+  , fs = require('fs')
   , test = require('tape')
 
 test('test basic for loop tag', function(assert) {
@@ -46,3 +47,25 @@ test('test basic if/else tag', function(assert) {
   assert.strictEqual(render({happy: 'truthy value'}), 'hello, my friend!')
   assert.end()
 })
+
+test('example from README', function(assert) {
+  var source = readTemplateSync('people.html')
+    , expected = readTemplateSync('people.html.expected')
+    , render = lindy(source)
+    , data = {
+        heading: 'People',
+        people: [
+            {name: 'Dave', age: 25, employed: true}
+          , {name: 'John', age: 17, employed: false}
+        ]
+      }
+    , output
+
+  output = render(data)
+  assert.strictEqual(output, expected)
+  assert.end()
+})
+
+function readTemplateSync(path) {
+  return fs.readFileSync('./tests/templates/' + path, {encoding: 'utf-8'})
+}
