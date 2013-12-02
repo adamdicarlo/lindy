@@ -23,7 +23,7 @@
     "url": "https://github.com/adamdicarlo/lindy/issues"
   },
   "dependencies": {
-    "lindy-simple": "0.0.2",
+    "lindy-simple": "0.0.3",
     "peek": "0.0.1"
   },
   "devDependencies": {
