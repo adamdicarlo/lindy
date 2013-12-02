@@ -1,7 +1,7 @@
 {
   "name": "lindy",
   "version": "0.0.0",
-  "description": "Lightweight JavaScript template language with familiar syntax.",
+  "description": "Lightweight JavaScript template language with a familiar syntax.",
   "main": "index.js",
   "scripts": {
     "test": "node tests/index.js"
