@@ -59,37 +59,57 @@ test('test basic if/else tag', function(assert) {
   assert.end()
 })
 
-test('boolean expression with not operator', function(assert) {
-  var bits = ['not', 'foo']
-    , test_context = {foo: true}
-    , parser = {
-        lookup: function(var_name) {
-          assert.equal(var_name, 'foo', '"foo" is looked up')
-          return function test_lookup(context) {
-            assert.equal(context, test_context, 'same context used')
-            return context[var_name]
-          }
+function mock_parser(assert, expected_var_name, expected_context) {
+  return {
+      lookup: function(var_name) {
+        assert.equal(var_name, expected_var_name, 'expected variable is looked up')
+        return function test_lookup(context) {
+          assert.equal(context, expected_context, 'expected context object used')
+          return context[var_name]
         }
       }
+  }
+}
+
+test('boolean expressions with not operator', function(assert) {
+  var bits = ['not', 'foo']
+    , context = {foo: true}
+    , parser = mock_parser(assert, 'foo', context)
     , run = expression(parser, bits)
 
-  // Test negating a true value.
-  assert.equal(run(test_context), false, '"not" negates boolean true')
+  // test negating a true value.
+  assert.equal(run(context), false, '"not" negates boolean true')
   assert.deepEqual(bits, ['not', 'foo'], 'expression does not modify bits arg')
 
-  // Test negating a false value.
-  test_context.foo = false
-  assert.equal(run(test_context), true, '"not" negates boolean false')
+  // test negating a false value.
+  context.foo = false
+  assert.equal(run(context), true, '"not" negates boolean false')
 
-  // Test in conjunction with "even" operator.
+  // test in conjunction with "even" operator.
   bits = ['not', 'even', 'foo']
-  test_context.foo = 5
+  context.foo = 5
   run = expression(parser, bits)
-  assert.equal(run(test_context), true, '"not even 5" is true')
+  assert.equal(run(context), true, '"not even 5" is true')
 
-  test_context.foo = 4
-  assert.equal(run(test_context), false, '"not even 4" is false')
+  context.foo = 4
+  assert.equal(run(context), false, '"not even 4" is false')
 
+  assert.end()
+})
+
+test('expressions with "odd" and "even" operators', function(assert) {
+  var context = {}
+    , parser = mock_parser(assert, 'count', context)
+    , run_odd = expression(parser, ['odd', 'count'])
+    , run_even = expression(parser, ['even', 'count'])
+    , is_odd
+
+  for(var i = -5; i <= 5; ++i) {
+    context.count = i
+    is_odd = (i % 2) !== 0
+    assert.equal(run_odd(context), is_odd, 'is ' + i + ' odd?')
+    assert.equal(run_even(context), !is_odd, 'is ' + i + ' even?')
+  }
   assert.end()
 })
 
