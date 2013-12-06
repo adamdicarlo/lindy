@@ -3,7 +3,7 @@ var lindy = require('../index')
   , test = require('tape')
   , expression = require('../lib/expression')
 
-test('test basic for loop tag', function(assert) {
+test('basic for loop tag', function(assert) {
   var source = ' {% for color in colors %}\n {{ color }}\n {% endfor %} '
     , render = lindy(source)
     , output
@@ -13,42 +13,42 @@ test('test basic for loop tag', function(assert) {
   assert.end()
 })
 
-test('test basic reversed for loop tag', function(assert) {
+test('basic reversed for loop tag', function(assert) {
   var source = '{% for i in numbers reversed %}{{ i }}{% endfor %}'
     , render = lindy(source)
     , output
 
   output = render({numbers: [1,2,3,4,5]})
-  assert.strictEqual(output, '54321', 'reverses given numbers')
+  assert.equal(output, '54321', 'reverses given numbers')
   assert.end()
 })
 
-test('test for loop with an {% empty %} clause', function(assert) {
+test('for loop with an {% empty %} clause', function(assert) {
   var source = [
-      '{% for x in xs %}'
-    , '  {{ x.k }}={{ x.v }}'
-    , '{% empty %}'
-    , '  nothing in xs'
-    , '{% endfor %}'
-  ].join('\n')
+          '{% for x in xs %}'
+        , '  {{ x.k }}={{ x.v }}'
+        , '{% empty %}'
+        , '  nothing in xs'
+        , '{% endfor %}'
+      ].join('\n')
     , render = lindy(source)
     , output
 
   output = render({xs: [{k: 'pos', v: 1}, {k: 'pos', v: 5}]})
-  assert.strictEqual(output, '\n  pos=1\n\n  pos=5\n')
+  assert.equal(output, '\n  pos=1\n\n  pos=5\n')
   assert.end()
 })
 
-test('test basic if tag', function(assert) {
+test('basic if tag', function(assert) {
   var source = 'hello{% if specific %} {{specific}}{%endif%}'
     , render = lindy(source)
 
-  assert.strictEqual(render(), 'hello')
-  assert.strictEqual(render({specific: 'world'}), 'hello world')
+  assert.equal(render(), 'hello')
+  assert.equal(render({specific: 'world'}), 'hello world')
   assert.end()
 })
 
-test('test basic if/else tag', function(assert) {
+test('basic if/else tag', function(assert) {
   var source = 'hello, {% if happy %}my friend{% else %}jerk{% endif %}!'
     , render = lindy(source)
 
@@ -77,15 +77,15 @@ test('boolean expressions with not operator', function(assert) {
     , parser = mock_parser(assert, 'foo', context)
     , run = expression(parser, bits)
 
-  // test negating a true value.
+  // Test negating a true value.
   assert.equal(run(context), false, '"not" negates boolean true')
   assert.deepEqual(bits, ['not', 'foo'], 'expression does not modify bits arg')
 
-  // test negating a false value.
+  // Test negating a false value.
   context.foo = false
   assert.equal(run(context), true, '"not" negates boolean false')
 
-  // test in conjunction with "even" operator.
+  // Test in conjunction with "even" operator.
   bits = ['not', 'even', 'foo']
   context.foo = 5
   run = expression(parser, bits)
@@ -114,25 +114,25 @@ test('expressions with "odd" and "even" operators', function(assert) {
 })
 
 test('example from README', function(assert) {
-  var source = readTemplateSync('people.html')
-    , expected = readTemplateSync('people.html.expected')
+  var source = read_template_sync('people.html')
+    , expected = read_template_sync('people.html.expected')
     , render = lindy(source)
     , data = {
-        heading: 'People',
-        people: [
-            {name: 'Dave', age: 25, employed: true}
-          , {name: 'John', age: 17, employed: false}
-        ]
+          heading: 'People'
+        , people: [
+              {name: 'Dave', age: 25, employed: true}
+            , {name: 'John', age: 17, employed: false}
+          ]
       }
     , output
 
   output = render(data)
-  assert.strictEqual(output, expected)
+  assert.equal(output, expected)
   assert.end()
 })
 
 test('nested if tags', function(assert) {
-  var source = readTemplateSync('nested-ifs.lindy')
+  var source = read_template_sync('nested-ifs.lindy')
     , render = lindy(source)
     , just_dark = /^\s*dark\s*$/
     , test_cases = [
@@ -149,6 +149,6 @@ test('nested if tags', function(assert) {
   assert.end()
 })
 
-function readTemplateSync(path) {
+function read_template_sync(path) {
   return fs.readFileSync('./tests/templates/' + path, {encoding: 'utf-8'})
 }
