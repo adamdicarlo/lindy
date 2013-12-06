@@ -1,6 +1,7 @@
 var lindy = require('../index')
   , fs = require('fs')
   , test = require('tape')
+  , expression = require('../lib/expression')
 
 test('test basic for loop tag', function(assert) {
   var source = ' {% for color in colors %}\n {{ color }}\n {% endfor %} '
@@ -55,6 +56,40 @@ test('test basic if/else tag', function(assert) {
   assert.strictEqual(render({happy: false}), 'hello, jerk!')
   assert.strictEqual(render({happy: true}), 'hello, my friend!')
   assert.strictEqual(render({happy: 'truthy value'}), 'hello, my friend!')
+  assert.end()
+})
+
+test('boolean expression with not operator', function(assert) {
+  var bits = ['not', 'foo']
+    , test_context = {foo: true}
+    , parser = {
+        lookup: function(var_name) {
+          assert.equal(var_name, 'foo', '"foo" is looked up')
+          return function test_lookup(context) {
+            assert.equal(context, test_context, 'same context used')
+            return context[var_name]
+          }
+        }
+      }
+    , run = expression(parser, bits)
+
+  // Test negating a true value.
+  assert.equal(run(test_context), false, '"not" negates boolean true')
+  assert.deepEqual(bits, ['not', 'foo'], 'expression does not modify bits arg')
+
+  // Test negating a false value.
+  test_context.foo = false
+  assert.equal(run(test_context), true, '"not" negates boolean false')
+
+  // Test in conjunction with "even" operator.
+  bits = ['not', 'even', 'foo']
+  test_context.foo = 5
+  run = expression(parser, bits)
+  assert.equal(run(test_context), true, '"not even 5" is true')
+
+  test_context.foo = 4
+  assert.equal(run(test_context), false, '"not even 4" is false')
+
   assert.end()
 })
 
