@@ -172,5 +172,5 @@ test('nested if tags', function(assert) {
 })
 
 function read_template_sync(path) {
-  return fs.readFileSync('./tests/templates/' + path, {encoding: 'utf-8'})
+  return fs.readFileSync('./tests/templates/' + path, 'utf8')
 }
