@@ -113,6 +113,28 @@ test('expressions with "odd" and "even" operators', function(assert) {
   assert.end()
 })
 
+test('if statement with expression "not odd x"', function(assert) {
+  var source = 'x is {%if not odd x%}even{%else%}odd{%endif%}'
+    , render = lindy(source)
+
+  assert.equal(render({x: -1}), 'x is odd', '-1 is odd')
+  assert.equal(render({x: 0}), 'x is even', '0 is even')
+  assert.equal(render({x: 1}), 'x is odd', '1 is odd')
+  assert.equal(render({x: 2}), 'x is even', '2 is even')
+  assert.end()
+})
+
+test('if statement with expression "not x"', function(assert) {
+  var source = 'x is {% if  not  x %}falsy{% else %}truthy{% endif %}'
+    , render = lindy(source)
+
+  assert.equal(render({x: -1}), 'x is truthy', '-1 is truthy')
+  assert.equal(render({x: 0}), 'x is falsy', '0 is falsy')
+  assert.equal(render({x: 1}), 'x is truthy', '1 is truthy')
+  assert.equal(render({x: 2}), 'x is truthy', '2 is truthy')
+  assert.end()
+})
+
 test('example from README', function(assert) {
   var source = read_template_sync('people.html')
     , expected = read_template_sync('people.html.expected')
